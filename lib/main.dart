@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(const SmartDateDemoApp());
 
@@ -131,10 +133,17 @@ class _DemoHomePageState extends State<DemoHomePage> {
         ),
         actions: [
           TextButton.icon(
-            onPressed: () => _launchUrl('https://pub.dev/packages/smart_date_formatter'),
-            icon: const Icon(Icons.open_in_new, color: Colors.white70, size: 14),
-            label: const Text('pub.dev',
-                style: TextStyle(color: Colors.white70, fontSize: 12)),
+            onPressed: () =>
+                _launchUrl('https://pub.dev/packages/smart_date_formatter'),
+            icon: const Icon(
+              Icons.open_in_new,
+              color: Colors.white70,
+              size: 14,
+            ),
+            label: const Text(
+              'pub.dev',
+              style: TextStyle(color: Colors.white70, fontSize: 12),
+            ),
           ),
         ],
         bottom: PreferredSize(
@@ -144,10 +153,8 @@ class _DemoHomePageState extends State<DemoHomePage> {
             child: Row(
               children: List.generate(
                 _tabs.length,
-                (i) => _tabButton(
-                  '${_tabs[i]['icon']} ${_tabs[i]['label']}',
-                  i,
-                ),
+                (i) =>
+                    _tabButton('${_tabs[i]['icon']} ${_tabs[i]['label']}', i),
               ),
             ),
           ),
@@ -185,7 +192,8 @@ class _DemoHomePageState extends State<DemoHomePage> {
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 4),
             constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.72),
+              maxWidth: MediaQuery.of(context).size.width * 0.72,
+            ),
             decoration: BoxDecoration(
               color: isMe ? Colors.indigo : Colors.white,
               borderRadius: BorderRadius.only(
@@ -204,28 +212,38 @@ class _DemoHomePageState extends State<DemoHomePage> {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             child: Column(
-              crossAxisAlignment:
-                  isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              crossAxisAlignment: isMe
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
               children: [
                 if (!isMe)
-                  Text(msg['sender'] as String,
-                      style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.indigo)),
+                  Text(
+                    msg['sender'] as String,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.indigo,
+                    ),
+                  ),
                 const SizedBox(height: 2),
-                Text(msg['text'] as String,
-                    style: TextStyle(
-                        color: isMe ? Colors.white : Colors.black87,
-                        fontSize: 14)),
+                Text(
+                  msg['text'] as String,
+                  style: TextStyle(
+                    color: isMe ? Colors.white : Colors.black87,
+                    fontSize: 14,
+                  ),
+                ),
                 const SizedBox(height: 4),
                 // ✅ timeAgo extension
-                Text(time.timeAgo,
-                    style: TextStyle(
-                        fontSize: 10,
-                        color: isMe
-                            ? Colors.white.withValues(alpha: 0.7)
-                            : Colors.grey)),
+                Text(
+                  time.timeAgo,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: isMe
+                        ? Colors.white.withValues(alpha: 0.7)
+                        : Colors.grey,
+                  ),
+                ),
               ],
             ),
           ),
@@ -252,24 +270,31 @@ class _DemoHomePageState extends State<DemoHomePage> {
       children: [
         _sectionHeader('calendar & shortTimestamp'),
         const SizedBox(height: 12),
-        ...dates.map((date) => Card(
-              margin: const EdgeInsets.only(bottom: 10),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              child: ListTile(
-                leading: _dayCircle(date),
-                // ✅ calendar extension
-                title: Text(date.calendar,
-                    style: const TextStyle(fontWeight: FontWeight.w600)),
-                // ✅ shortTimestamp extension
-                subtitle: Text(date.shortTimestamp,
-                    style:
-                        const TextStyle(color: Colors.grey, fontSize: 12)),
-                trailing: Text('${date.day}/${date.month}/${date.year}',
-                    style:
-                        const TextStyle(fontSize: 11, color: Colors.grey)),
+        ...dates.map(
+          (date) => Card(
+            margin: const EdgeInsets.only(bottom: 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: _dayCircle(date),
+              // ✅ calendar extension
+              title: Text(
+                date.calendar,
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
-            )),
+              // ✅ shortTimestamp extension
+              subtitle: Text(
+                date.shortTimestamp,
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+              trailing: Text(
+                '${date.day}/${date.month}/${date.year}',
+                style: const TextStyle(fontSize: 11, color: Colors.grey),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -278,9 +303,18 @@ class _DemoHomePageState extends State<DemoHomePage> {
   Widget _buildExtensionsTab() {
     final testDates = [
       {'label': 'DateTime.now()', 'date': DateTime.now()},
-      {'label': '1 hour ago', 'date': DateTime.now().subtract(const Duration(hours: 1))},
-      {'label': 'Tomorrow', 'date': DateTime.now().add(const Duration(days: 1))},
-      {'label': 'Yesterday', 'date': DateTime.now().subtract(const Duration(days: 1))},
+      {
+        'label': '1 hour ago',
+        'date': DateTime.now().subtract(const Duration(hours: 1)),
+      },
+      {
+        'label': 'Tomorrow',
+        'date': DateTime.now().add(const Duration(days: 1)),
+      },
+      {
+        'label': 'Yesterday',
+        'date': DateTime.now().subtract(const Duration(days: 1)),
+      },
       {'label': 'Year 2099', 'date': DateTime(2099, 1, 1)},
       {'label': 'Year 2000', 'date': DateTime(2000, 6, 15)},
       {'label': 'Saturday', 'date': DateTime(2024, 6, 22)},
@@ -296,17 +330,21 @@ class _DemoHomePageState extends State<DemoHomePage> {
           return Card(
             margin: const EdgeInsets.only(bottom: 12),
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item['label'] as String,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Colors.indigo)),
+                  Text(
+                    item['label'] as String,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Colors.indigo,
+                    ),
+                  ),
                   const Divider(height: 16),
                   Wrap(
                     spacing: 8,
@@ -322,14 +360,22 @@ class _DemoHomePageState extends State<DemoHomePage> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text('startOfWeek: ${date.startOfWeek.format('EEE dd MMM')}',
-                      style: const TextStyle(fontSize: 11, color: Colors.grey)),
-                  Text('endOfWeek:   ${date.endOfWeek.format('EEE dd MMM')}',
-                      style: const TextStyle(fontSize: 11, color: Colors.grey)),
-                  Text('startOfMonth: ${date.startOfMonth.format('dd MMM yyyy')}',
-                      style: const TextStyle(fontSize: 11, color: Colors.grey)),
-                  Text('endOfMonth:   ${date.endOfMonth.format('dd MMM yyyy')}',
-                      style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                  Text(
+                    'startOfWeek: ${date.startOfWeek.format('EEE dd MMM')}',
+                    style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  ),
+                  Text(
+                    'endOfWeek:   ${date.endOfWeek.format('EEE dd MMM')}',
+                    style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  ),
+                  Text(
+                    'startOfMonth: ${date.startOfMonth.format('dd MMM yyyy')}',
+                    style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  ),
+                  Text(
+                    'endOfMonth:   ${date.endOfMonth.format('dd MMM yyyy')}',
+                    style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  ),
                 ],
               ),
             ),
@@ -346,12 +392,21 @@ class _DemoHomePageState extends State<DemoHomePage> {
       {'label': "format('dd-MM-yyyy')", 'value': date.format('dd-MM-yyyy')},
       {'label': "format('MM/dd/yyyy')", 'value': date.format('MM/dd/yyyy')},
       {'label': "format('MMM dd, yyyy')", 'value': date.format('MMM dd, yyyy')},
-      {'label': "format('MMMM dd, yyyy')", 'value': date.format('MMMM dd, yyyy')},
+      {
+        'label': "format('MMMM dd, yyyy')",
+        'value': date.format('MMMM dd, yyyy'),
+      },
       {'label': "format('EEEE')", 'value': date.format('EEEE')},
-      {'label': "format('EEE, dd MMM yy')", 'value': date.format('EEE, dd MMM yy')},
+      {
+        'label': "format('EEE, dd MMM yy')",
+        'value': date.format('EEE, dd MMM yy'),
+      },
       {'label': "format('hh:mm a')", 'value': date.format('hh:mm a')},
       {'label': "format('HH:mm:ss')", 'value': date.format('HH:mm:ss')},
-      {'label': "format('EEEE, dd MMMM yyyy')", 'value': date.format('EEEE, dd MMMM yyyy')},
+      {
+        'label': "format('EEEE, dd MMMM yyyy')",
+        'value': date.format('EEEE, dd MMMM yyyy'),
+      },
       {'label': 'toReadable', 'value': date.toReadable},
       {'label': 'toISO', 'value': date.toISO},
       {'label': 'toTimeString', 'value': date.toTimeString},
@@ -365,25 +420,34 @@ class _DemoHomePageState extends State<DemoHomePage> {
         const SizedBox(height: 4),
         _infoBox('Reference: ${date.toReadable}\n${date.toISO}'),
         const SizedBox(height: 12),
-        ...formats.map((f) => Card(
-              margin: const EdgeInsets.only(bottom: 8),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              child: ListTile(
-                dense: true,
-                title: Text(f['label']!,
-                    style: const TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'monospace',
-                        color: Colors.indigo,
-                        fontWeight: FontWeight.w600)),
-                trailing: Text(f['value']!,
-                    style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87)),
+        ...formats.map(
+          (f) => Card(
+            margin: const EdgeInsets.only(bottom: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ListTile(
+              dense: true,
+              title: Text(
+                f['label']!,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'monospace',
+                  color: Colors.indigo,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            )),
+              trailing: Text(
+                f['value']!,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -401,42 +465,89 @@ class _DemoHomePageState extends State<DemoHomePage> {
       children: [
         _sectionHeader('Date Calculations & Range — v0.5.0'),
         const SizedBox(height: 12),
-        _calcCard(icon: '🎂', title: 'Age Calculator', color: Colors.purple,
-            children: [
-              _calcRow('Birth date', birthDate.format('dd MMMM yyyy')),
-              _calcRow('Age today', '${birthDate.age} years old'),
-              _calcRow('Days since born', '${birthDate.daysUntil(now) * -1} days'),
-            ]),
-        _calcCard(icon: '💼', title: 'Working Days', color: Colors.teal,
-            children: [
-              _calcRow('Today', now.format('EEE, dd MMM')),
-              _calcRow('+10 working days', nextRelease.format('EEE, dd MMM yyyy')),
-              _calcRow('Working days until deadline', '${now.workingDaysUntil(deadline)} days'),
-              _calcRow('Working days since project start', '${projectStart.workingDaysUntil(now)} days'),
-              _calcRow('Today is weekend?', now.isWeekend ? '✅ Yes' : '❌ No'),
-              _calcRow('Today is weekday?', now.isWeekday ? '✅ Yes' : '❌ No'),
-            ]),
-        _calcCard(icon: '⏳', title: 'Days Until / Since', color: Colors.orange,
-            children: [
-              _calcRow('Days until New Year\'s Eve', '${now.daysUntil(eventDate)} days'),
-              _calcRow('Days since project started', '${now.daysSince(projectStart)} days'),
-              _calcRow('Days until deadline', '${now.daysUntil(deadline)} days'),
-            ]),
-        _calcCard(icon: '📆', title: 'Week & Month Range', color: Colors.green,
-            children: [
-              _calcRow('Start of week', now.startOfWeek.format('EEE, dd MMM')),
-              _calcRow('End of week', now.endOfWeek.format('EEE, dd MMM')),
-              _calcRow('Start of month', now.startOfMonth.format('dd MMM yyyy')),
-              _calcRow('End of month', now.endOfMonth.format('dd MMM yyyy')),
-              _calcRow('Start of year', now.startOfYear.format('dd MMM yyyy')),
-              _calcRow('End of year', now.endOfYear.format('dd MMM yyyy')),
-            ]),
-        _calcCard(icon: '🎯', title: 'isBetween Range Check', color: Colors.indigo,
-            children: [
-              _calcRow('Range', '${projectStart.format('dd MMM')} → ${deadline.format('dd MMM')}'),
-              _calcRow('Is today in range?', now.isBetween(projectStart, deadline) ? '✅ Yes' : '❌ No'),
-              _calcRow('Is New Year in range?', eventDate.isBetween(projectStart, deadline) ? '✅ Yes' : '❌ No'),
-            ]),
+        _calcCard(
+          icon: '🎂',
+          title: 'Age Calculator',
+          color: Colors.purple,
+          children: [
+            _calcRow('Birth date', birthDate.format('dd MMMM yyyy')),
+            _calcRow('Age today', '${birthDate.age} years old'),
+            _calcRow(
+              'Days since born',
+              '${birthDate.daysUntil(now) * -1} days',
+            ),
+          ],
+        ),
+        _calcCard(
+          icon: '💼',
+          title: 'Working Days',
+          color: Colors.teal,
+          children: [
+            _calcRow('Today', now.format('EEE, dd MMM')),
+            _calcRow(
+              '+10 working days',
+              nextRelease.format('EEE, dd MMM yyyy'),
+            ),
+            _calcRow(
+              'Working days until deadline',
+              '${now.workingDaysUntil(deadline)} days',
+            ),
+            _calcRow(
+              'Working days since project start',
+              '${projectStart.workingDaysUntil(now)} days',
+            ),
+            _calcRow('Today is weekend?', now.isWeekend ? '✅ Yes' : '❌ No'),
+            _calcRow('Today is weekday?', now.isWeekday ? '✅ Yes' : '❌ No'),
+          ],
+        ),
+        _calcCard(
+          icon: '⏳',
+          title: 'Days Until / Since',
+          color: Colors.orange,
+          children: [
+            _calcRow(
+              'Days until New Year\'s Eve',
+              '${now.daysUntil(eventDate)} days',
+            ),
+            _calcRow(
+              'Days since project started',
+              '${now.daysSince(projectStart)} days',
+            ),
+            _calcRow('Days until deadline', '${now.daysUntil(deadline)} days'),
+          ],
+        ),
+        _calcCard(
+          icon: '📆',
+          title: 'Week & Month Range',
+          color: Colors.green,
+          children: [
+            _calcRow('Start of week', now.startOfWeek.format('EEE, dd MMM')),
+            _calcRow('End of week', now.endOfWeek.format('EEE, dd MMM')),
+            _calcRow('Start of month', now.startOfMonth.format('dd MMM yyyy')),
+            _calcRow('End of month', now.endOfMonth.format('dd MMM yyyy')),
+            _calcRow('Start of year', now.startOfYear.format('dd MMM yyyy')),
+            _calcRow('End of year', now.endOfYear.format('dd MMM yyyy')),
+          ],
+        ),
+        _calcCard(
+          icon: '🎯',
+          title: 'isBetween Range Check',
+          color: Colors.indigo,
+          children: [
+            _calcRow(
+              'Range',
+              '${projectStart.format('dd MMM')} → ${deadline.format('dd MMM')}',
+            ),
+            _calcRow(
+              'Is today in range?',
+              now.isBetween(projectStart, deadline) ? '✅ Yes' : '❌ No',
+            ),
+            _calcRow(
+              'Is New Year in range?',
+              eventDate.isBetween(projectStart, deadline) ? '✅ Yes' : '❌ No',
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -469,36 +580,49 @@ class _DemoHomePageState extends State<DemoHomePage> {
           return Card(
             margin: const EdgeInsets.only(bottom: 12),
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(children: [
-                    Text(l['flag'] as String,
-                        style: const TextStyle(fontSize: 22)),
-                    const SizedBox(width: 8),
-                    Text(l['name'] as String,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.indigo)),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.indigo.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(20),
+                  Row(
+                    children: [
+                      Text(
+                        l['flag'] as String,
+                        style: const TextStyle(fontSize: 22),
                       ),
-                      child: Text('locale: ${locale.code}',
+                      const SizedBox(width: 8),
+                      Text(
+                        l['name'] as String,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.indigo,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.indigo.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          'locale: ${locale.code}',
                           style: const TextStyle(
-                              fontSize: 11,
-                              color: Colors.indigo,
-                              fontFamily: 'monospace')),
-                    ),
-                  ]),
+                            fontSize: 11,
+                            color: Colors.indigo,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   const Divider(height: 16),
                   // ✅ timeAgoIn extension
                   _calcRow('2 hours ago', date2h.timeAgoIn(locale)),
@@ -516,11 +640,22 @@ class _DemoHomePageState extends State<DemoHomePage> {
   // ─── TAB 7: SmartParser ───────────────────────────────────────────────────
   Widget _buildParserTab() {
     final expressions = [
-      'today', 'tomorrow', 'yesterday',
-      'in 3 days', 'in 2 weeks', 'in 1 month', 'in 1 year',
-      '3 days ago', '2 weeks ago', '1 month ago',
-      'next monday', 'last friday', 'next week',
-      'last week', 'next month', 'last year',
+      'today',
+      'tomorrow',
+      'yesterday',
+      'in 3 days',
+      'in 2 weeks',
+      'in 1 month',
+      'in 1 year',
+      '3 days ago',
+      '2 weeks ago',
+      '1 month ago',
+      'next monday',
+      'last friday',
+      'next week',
+      'last week',
+      'next month',
+      'last year',
       '2024-06-15',
     ];
 
@@ -537,7 +672,8 @@ class _DemoHomePageState extends State<DemoHomePage> {
           return Card(
             margin: const EdgeInsets.only(bottom: 8),
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: ListTile(
               dense: true,
               leading: Container(
@@ -555,20 +691,25 @@ class _DemoHomePageState extends State<DemoHomePage> {
                   size: 16,
                 ),
               ),
-              title: Text('"$expr"',
-                  style: const TextStyle(
-                      fontFamily: 'monospace',
-                      color: Colors.indigo,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13)),
+              title: Text(
+                '"$expr"',
+                style: const TextStyle(
+                  fontFamily: 'monospace',
+                  color: Colors.indigo,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
               trailing: result != null
-                  ? Text(result.format('dd MMM yyyy'),
+                  ? Text(
+                      result.format('dd MMM yyyy'),
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color: Colors.black87))
-                  : const Text('null',
-                      style: TextStyle(color: Colors.red)),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: Colors.black87,
+                      ),
+                    )
+                  : const Text('null', style: TextStyle(color: Colors.red)),
             ),
           );
         }),
@@ -655,54 +796,58 @@ class _DemoHomePageState extends State<DemoHomePage> {
     required Color color,
     Duration refreshRate = const Duration(seconds: 60),
     String prefix = '',
-  }) =>
-      Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(Icons.access_time, color: color, size: 22),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                            color: color)),
-                    const SizedBox(height: 4),
-                    // ✅ TimeAgoText widget
-                    TimeAgoText(
-                      date: date,
-                      locale: locale,
-                      refreshRate: refreshRate,
-                      prefix: prefix,
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                    Text('locale: ${locale.code}  •  refresh: ${refreshRate.inSeconds}s',
-                        style: const TextStyle(
-                            fontSize: 10, color: Colors.grey)),
-                  ],
-                ),
-              ),
-            ],
+  }) => Card(
+    margin: const EdgeInsets.only(bottom: 12),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    child: Padding(
+      padding: const EdgeInsets.all(14),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(Icons.access_time, color: color, size: 22),
           ),
-        ),
-      );
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    color: color,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                // ✅ TimeAgoText widget
+                TimeAgoText(
+                  date: date,
+                  locale: locale,
+                  refreshRate: refreshRate,
+                  prefix: prefix,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'locale: ${locale.code}  •  refresh: ${refreshRate.inSeconds}s',
+                  style: const TextStyle(fontSize: 10, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 
   // ─── TAB 9: Countdown ─────────────────────────────────────────────────────
   Widget _buildCountdownTab() {
@@ -712,7 +857,9 @@ class _DemoHomePageState extends State<DemoHomePage> {
       children: [
         _sectionHeader('CountdownText Widget — Live Countdown — v1.0.0'),
         const SizedBox(height: 4),
-        _infoBox('Auto counts down every second. onFinished callback supported!'),
+        _infoBox(
+          'Auto counts down every second. onFinished callback supported!',
+        ),
         const SizedBox(height: 12),
 
         // New Year countdown
@@ -784,53 +931,57 @@ class _DemoHomePageState extends State<DemoHomePage> {
     required DateTime target,
     required String format,
     required Color color,
-  }) =>
-      Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: color)),
-                    Text(subtitle,
-                        style: const TextStyle(
-                            fontSize: 11, color: Colors.grey)),
-                    const SizedBox(height: 8),
-                    // ✅ CountdownText widget
-                    CountdownText(
-                      target: target,
-                      format: format,
-                      finishedText: '🎉 Done!',
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: color,
-                          fontFeatures: const [
-                            FontFeature.tabularFigures()
-                          ]),
-                    ),
-                    Text('format: "$format"',
-                        style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,
-                            fontFamily: 'monospace')),
-                  ],
+  }) => Card(
+    margin: const EdgeInsets.only(bottom: 12),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: color,
+                  ),
                 ),
-              ),
-            ],
+                Text(
+                  subtitle,
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                ),
+                const SizedBox(height: 8),
+                // ✅ CountdownText widget
+                CountdownText(
+                  target: target,
+                  format: format,
+                  finishedText: '🎉 Done!',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+                Text(
+                  'format: "$format"',
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: Colors.grey,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      );
+        ],
+      ),
+    ),
+  );
 
   // ─── TAB 10: DateRangeHelper ──────────────────────────────────────────────
   Widget _buildRangesTab() {
@@ -863,8 +1014,9 @@ class _DemoHomePageState extends State<DemoHomePage> {
         _sectionHeader('DateRangeHelper — DB Query Ranges — v1.0.0'),
         const SizedBox(height: 4),
         _infoBox(
-            'Perfect for database queries, analytics filters, and calendar views.\n'
-            'Today is: ${now.toReadable}'),
+          'Perfect for database queries, analytics filters, and calendar views.\n'
+          'Today is: ${now.toReadable}',
+        ),
         const SizedBox(height: 12),
         ...ranges.map((r) {
           final range = r['range'] as DateRange;
@@ -872,10 +1024,10 @@ class _DemoHomePageState extends State<DemoHomePage> {
           return Card(
             margin: const EdgeInsets.only(bottom: 8),
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -885,38 +1037,49 @@ class _DemoHomePageState extends State<DemoHomePage> {
                       Text(
                         'DateRangeHelper.${r['label']}',
                         style: const TextStyle(
-                            fontFamily: 'monospace',
-                            color: Colors.indigo,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12),
+                          fontFamily: 'monospace',
+                          color: Colors.indigo,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
                       ),
                       if (containsToday)
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.green.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Text('contains today',
-                              style: TextStyle(
-                                  fontSize: 9,
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold)),
+                          child: const Text(
+                            'contains today',
+                            style: TextStyle(
+                              fontSize: 9,
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                     ],
                   ),
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.arrow_forward,
-                          size: 12, color: Colors.grey),
+                      const Icon(
+                        Icons.arrow_forward,
+                        size: 12,
+                        color: Colors.grey,
+                      ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           '${range.start.format('dd MMM yyyy')} → ${range.end.format('dd MMM yyyy')}  •  ${range.days} days',
                           style: const TextStyle(
-                              fontSize: 11, color: Colors.grey),
+                            fontSize: 11,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                     ],
@@ -952,152 +1115,182 @@ range.overlaps(otherRange);       // true/false'''),
 
   // ─── Shared Helpers ───────────────────────────────────────────────────────
 
-  Widget _sectionHeader(String title) => Text(title,
-      style: const TextStyle(
-          fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w600));
+  Widget _sectionHeader(String title) => Text(
+    title,
+    style: const TextStyle(
+      fontSize: 13,
+      color: Colors.grey,
+      fontWeight: FontWeight.w600,
+    ),
+  );
 
   Widget _infoBox(String text) => Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.indigo.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(text,
-            style: const TextStyle(fontSize: 12, color: Colors.indigo)),
-      );
+    padding: const EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      color: Colors.indigo.withValues(alpha: 0.08),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Text(
+      text,
+      style: const TextStyle(fontSize: 12, color: Colors.indigo),
+    ),
+  );
 
   Widget _codeBlock(String code) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1E1E2E),
-          borderRadius: BorderRadius.circular(12),
+    width: double.infinity,
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: const Color(0xFF1E1E2E),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Text(
+        code,
+        style: const TextStyle(
+          fontFamily: 'monospace',
+          fontSize: 12,
+          color: Color(0xFFCDD6F4),
         ),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Text(code,
-              style: const TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 12,
-                  color: Color(0xFFCDD6F4))),
-        ),
-      );
+      ),
+    ),
+  );
 
   Widget _calcCard({
     required String icon,
     required String title,
     required Color color,
     required List<Widget> children,
-  }) =>
-      Card(
-        margin: const EdgeInsets.only(bottom: 14),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+  }) => Card(
+    margin: const EdgeInsets.only(bottom: 14),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+    child: Padding(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Row(children: [
-                Text(icon, style: const TextStyle(fontSize: 20)),
-                const SizedBox(width: 8),
-                Text(title,
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: color)),
-              ]),
-              const Divider(height: 16),
-              ...children,
+              Text(icon, style: const TextStyle(fontSize: 20)),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
             ],
           ),
-        ),
-      );
+          const Divider(height: 16),
+          ...children,
+        ],
+      ),
+    ),
+  );
 
   Widget _calcRow(String label, String value) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-                child: Text(label,
-                    style: const TextStyle(
-                        fontSize: 12, color: Colors.grey))),
-            const SizedBox(width: 8),
-            Flexible(
-                child: Text(value,
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87))),
-          ],
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
+          ),
         ),
-      );
-
-  Widget _chip(String label, bool value) => Chip(
-        label: Text('$label: $value',
-            style: TextStyle(
-                fontSize: 11,
-                color: value
-                    ? Colors.green.shade800
-                    : Colors.red.shade800,
-                fontWeight: FontWeight.w500)),
-        backgroundColor: value
-            ? Colors.green.withValues(alpha: 0.1)
-            : Colors.red.withValues(alpha: 0.1),
-        side: BorderSide(
-            color: value ? Colors.green.shade200 : Colors.red.shade200),
-        padding: EdgeInsets.zero,
-        visualDensity: VisualDensity.compact,
-      );
-
-  Widget _dayCircle(DateTime date) => Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          color: Colors.indigo.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Center(
-          child: Text('${date.day}',
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.indigo,
-                  fontSize: 16)),
-        ),
-      );
-
-  Widget _tabButton(String label, int index) => GestureDetector(
-        onTap: () => setState(() => _selectedTab = index),
-        child: Container(
-          padding:
-              const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: _selectedTab == index
-                    ? Colors.white
-                    : Colors.transparent,
-                width: 2.5,
-              ),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            value,
+            textAlign: TextAlign.right,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
             ),
           ),
-          child: Text(label,
-              style: TextStyle(
-                  color: _selectedTab == index
-                      ? Colors.white
-                      : Colors.white60,
-                  fontSize: 12,
-                  fontWeight: _selectedTab == index
-                      ? FontWeight.bold
-                      : FontWeight.normal)),
         ),
-      );
+      ],
+    ),
+  );
 
-  void _launchUrl(String url) {
-    // Opens pub.dev link
-    debugPrint('Opening: $url');
+  Widget _chip(String label, bool value) => Chip(
+    label: Text(
+      '$label: $value',
+      style: TextStyle(
+        fontSize: 11,
+        color: value ? Colors.green.shade800 : Colors.red.shade800,
+        fontWeight: FontWeight.w500,
+      ),
+    ),
+    backgroundColor: value
+        ? Colors.green.withValues(alpha: 0.1)
+        : Colors.red.withValues(alpha: 0.1),
+    side: BorderSide(
+      color: value ? Colors.green.shade200 : Colors.red.shade200,
+    ),
+    padding: EdgeInsets.zero,
+    visualDensity: VisualDensity.compact,
+  );
+
+  Widget _dayCircle(DateTime date) => Container(
+    width: 44,
+    height: 44,
+    decoration: BoxDecoration(
+      color: Colors.indigo.withValues(alpha: 0.1),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Center(
+      child: Text(
+        '${date.day}',
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.indigo,
+          fontSize: 16,
+        ),
+      ),
+    ),
+  );
+
+  Widget _tabButton(String label, int index) => GestureDetector(
+    onTap: () => setState(() => _selectedTab = index),
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: _selectedTab == index ? Colors.white : Colors.transparent,
+            width: 2.5,
+          ),
+        ),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: _selectedTab == index ? Colors.white : Colors.white60,
+          fontSize: 12,
+          fontWeight: _selectedTab == index
+              ? FontWeight.bold
+              : FontWeight.normal,
+        ),
+      ),
+    ),
+  );
+
+  Future<void> _launchUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+
+    if (kIsWeb) {
+      await launchUrl(
+        uri,
+        webOnlyWindowName: '_blank', // opens in new tab
+      );
+    } else {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 }
 
@@ -1142,9 +1335,12 @@ class _LiveParserWidgetState extends State<_LiveParserWidget> {
               decoration: InputDecoration(
                 hintText: 'Type: tomorrow, next monday, in 3 days...',
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 10),
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 suffixIcon: _canParse
                     ? const Icon(Icons.check_circle, color: Colors.green)
                     : const Icon(Icons.cancel, color: Colors.red),
@@ -1170,22 +1366,35 @@ class _LiveParserWidgetState extends State<_LiveParserWidget> {
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('✅ Parsed successfully!',
-                              style: TextStyle(
-                                  color: Colors.green.shade700,
-                                  fontWeight: FontWeight.bold)),
+                          Text(
+                            '✅ Parsed successfully!',
+                            style: TextStyle(
+                              color: Colors.green.shade700,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           const SizedBox(height: 4),
-                          Text('DateTime: ${_result!.toISO}',
-                              style: const TextStyle(
-                                  fontFamily: 'monospace', fontSize: 13)),
-                          Text('calendar: ${_result!.calendar}',
-                              style: const TextStyle(fontSize: 13)),
-                          Text('timeAgo: ${_result!.timeAgo}',
-                              style: const TextStyle(fontSize: 13)),
+                          Text(
+                            'DateTime: ${_result!.toISO}',
+                            style: const TextStyle(
+                              fontFamily: 'monospace',
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            'calendar: ${_result!.calendar}',
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                          Text(
+                            'timeAgo: ${_result!.timeAgo}',
+                            style: const TextStyle(fontSize: 13),
+                          ),
                         ],
                       )
-                    : Text('❌ Cannot parse "${_controller.text}"',
-                        style: TextStyle(color: Colors.red.shade700)),
+                    : Text(
+                        '❌ Cannot parse "${_controller.text}"',
+                        style: TextStyle(color: Colors.red.shade700),
+                      ),
               ),
           ],
         ),
