@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "C:/flutter/projects/smart_date_demo/linux/flutter"
+  "cmake.sourceDirectory": "C:/flutter/projects/smart_date_demo/linux/flutter",
+  "dart.flutterSdkPath": ".fvm/versions/3.41.6"
 }
